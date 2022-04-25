@@ -23,16 +23,15 @@ class FaceDetectorPainter extends CustomPainter {
           translateX(face.boundingBox.left, rotation, size, absoluteImageSize),
           translateY(face.boundingBox.top, rotation, size, absoluteImageSize),
           translateX(face.boundingBox.right, rotation, size, absoluteImageSize),
-          translateY(
-              face.boundingBox.bottom, rotation, size, absoluteImageSize),
+          translateY(face.boundingBox.bottom, rotation, size, absoluteImageSize),
         ),
         paint,
       );
 
       void paintContour(FaceContourType type) {
         final faceContour = face.contours[type];
-        if (faceContour?.positionsList != null) {
-          for (final Offset point in faceContour!.positionsList) {
+        if (faceContour?.points != null) {
+          for (final Offset point in faceContour!.points.cast()) {
             canvas.drawCircle(
                 Offset(
                   translateX(point.dx, rotation, size, absoluteImageSize),
@@ -64,7 +63,6 @@ class FaceDetectorPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(FaceDetectorPainter oldDelegate) {
-    return oldDelegate.absoluteImageSize != absoluteImageSize ||
-        oldDelegate.faces != faces;
+    return oldDelegate.absoluteImageSize != absoluteImageSize || oldDelegate.faces != faces;
   }
 }
