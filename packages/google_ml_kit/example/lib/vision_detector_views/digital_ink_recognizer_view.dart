@@ -9,8 +9,7 @@ class DigitalInkView extends StatefulWidget {
 }
 
 class _DigitalInkViewState extends State<DigitalInkView> {
-  final DigitalInkRecognizerModelManager _modelManager =
-      DigitalInkRecognizerModelManager();
+  final DigitalInkRecognizerModelManager _modelManager = DigitalInkRecognizerModelManager();
   final DigitalInkRecognizer _digitalInkRecognizer = DigitalInkRecognizer();
   List<Offset> _points = <Offset>[];
   String _recognizedText = '';
@@ -28,8 +27,7 @@ class _DigitalInkViewState extends State<DigitalInkView> {
                 onPanUpdate: (DragUpdateDetails details) {
                   setState(() {
                     final RenderObject? object = context.findRenderObject();
-                    final localPosition = (object as RenderBox?)
-                        ?.globalToLocal(details.localPosition);
+                    final localPosition = (object as RenderBox?)?.globalToLocal(details.localPosition);
                     if (localPosition != null) {
                       _points = List.from(_points)..add(localPosition);
                     }
@@ -99,33 +97,18 @@ class _DigitalInkViewState extends State<DigitalInkView> {
   }
 
   Future<void> _isModelDownloaded() async {
-    Toast().show(
-        'Checking if model is downloaded...',
-        _modelManager
-            .isModelDownloaded(_language)
-            .then((value) => value ? 'exists' : 'not exists'),
-        context,
-        this);
+    Toast().show('Checking if model is downloaded...',
+        _modelManager.isModelDownloaded(_language).then((value) => value ? 'exists' : 'not exists'), context, this);
   }
 
   Future<void> _deleteModel() async {
     Toast().show(
-        'Deleting model...',
-        _modelManager
-            .deleteModel(_language)
-            .then((value) => value ? 'success' : 'error'),
-        context,
-        this);
+        'Deleting model...', _modelManager.deleteModel(_language).then((value) => value ? 'success' : 'error'), context, this);
   }
 
   Future<void> _downloadModel() async {
-    Toast().show(
-        'Downloading model...',
-        _modelManager
-            .downloadModel(_language)
-            .then((value) => value ? 'success' : 'error'),
-        context,
-        this);
+    Toast().show('Downloading model...', _modelManager.downloadModel(_language).then((value) => value ? 'success' : 'error'),
+        context, this);
   }
 
   Future<void> _recogniseText() async {
@@ -136,8 +119,7 @@ class _DigitalInkViewState extends State<DigitalInkView> {
             ),
         barrierDismissible: true);
     try {
-      final candidates =
-          await _digitalInkRecognizer.readText(_points, _language);
+      final candidates = await _digitalInkRecognizer.recognize(_points, _language);
       _recognizedText = '';
       for (final candidate in candidates) {
         _recognizedText += '\n${candidate.text}';

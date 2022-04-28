@@ -46,14 +46,10 @@ class _CameraViewState extends State<CameraView> {
     _imagePicker = ImagePicker();
 
     if (cameras.any(
-      (element) =>
-          element.lensDirection == widget.initialDirection &&
-          element.sensorOrientation == 90,
+      (element) => element.lensDirection == widget.initialDirection && element.sensorOrientation == 90,
     )) {
       _cameraIndex = cameras.indexOf(
-        cameras.firstWhere((element) =>
-            element.lensDirection == widget.initialDirection &&
-            element.sensorOrientation == 90),
+        cameras.firstWhere((element) => element.lensDirection == widget.initialDirection && element.sensorOrientation == 90),
       );
     } else {
       _cameraIndex = cameras.indexOf(
@@ -86,9 +82,7 @@ class _CameraViewState extends State<CameraView> {
                 child: Icon(
                   _mode == ScreenMode.liveFeed
                       ? Icons.photo_library_outlined
-                      : (Platform.isIOS
-                          ? Icons.camera_alt_outlined
-                          : Icons.camera),
+                      : (Platform.isIOS ? Icons.camera_alt_outlined : Icons.camera),
                 ),
               ),
             ),
@@ -108,9 +102,7 @@ class _CameraViewState extends State<CameraView> {
         width: 70.0,
         child: FloatingActionButton(
           child: Icon(
-            Platform.isIOS
-                ? Icons.flip_camera_ios_outlined
-                : Icons.flip_camera_android_outlined,
+            Platform.isIOS ? Icons.flip_camera_ios_outlined : Icons.flip_camera_android_outlined,
             size: 40,
           ),
           onPressed: _switchLiveCamera,
@@ -172,9 +164,7 @@ class _CameraViewState extends State<CameraView> {
                   _controller!.setZoomLevel(zoomLevel);
                 });
               },
-              divisions: (maxZoomLevel - 1).toInt() < 1
-                  ? null
-                  : (maxZoomLevel - 1).toInt(),
+              divisions: (maxZoomLevel - 1).toInt() < 1 ? null : (maxZoomLevel - 1).toInt(),
             ),
           )
         ],
@@ -293,17 +283,16 @@ class _CameraViewState extends State<CameraView> {
     }
     final bytes = allBytes.done().buffer.asUint8List();
 
-    final Size imageSize =
-        Size(image.width.toDouble(), image.height.toDouble());
+    /// final Size imageSize =
+    ///     Size(image.width.toDouble(), image.height.toDouble());
+    int width = image.planes[0].bytesPerRow;
+    final Size imageSize = Size(width.toDouble(), image.height.toDouble());
 
-    final camera = cameras[_cameraIndex];
-    final imageRotation =
-        InputImageRotationValue.fromRawValue(camera.sensorOrientation) ??
-            InputImageRotation.rotation0deg;
+    ///final camera = cameras[_cameraIndex];
+    final camera = cameras[0];
+    final imageRotation = InputImageRotationValue.fromRawValue(camera.sensorOrientation) ?? InputImageRotation.rotation0deg;
 
-    final inputImageFormat =
-        InputImageFormatValue.fromRawValue(image.format.raw) ??
-            InputImageFormat.nv21;
+    final inputImageFormat = InputImageFormatValue.fromRawValue(image.format.raw) ?? InputImageFormat.nv21;
 
     final planeData = image.planes.map(
       (Plane plane) {
@@ -322,9 +311,9 @@ class _CameraViewState extends State<CameraView> {
       planeData: planeData,
     );
 
-    final inputImage =
-        InputImage.fromBytes(bytes: bytes, inputImageData: inputImageData);
+    final inputImage = InputImage.fromBytes(bytes: bytes, inputImageData: inputImageData);
 
     widget.onImage(inputImage);
+    //processImage(inputImage);
   }
 }

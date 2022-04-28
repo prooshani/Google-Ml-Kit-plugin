@@ -35,12 +35,9 @@ class _BarcodeScannerViewState extends State<BarcodeScannerView> {
     if (_isBusy) return;
     _isBusy = true;
     final barcodes = await _barcodeScanner.processImage(inputImage);
-    if (inputImage.inputImageData?.size != null &&
-        inputImage.inputImageData?.imageRotation != null) {
-      final painter = BarcodeDetectorPainter(
-          barcodes,
-          inputImage.inputImageData!.size,
-          inputImage.inputImageData!.imageRotation);
+    if (inputImage.inputImageData?.size != null && inputImage.inputImageData?.imageRotation != null) {
+      print(' ******* detected barcode is: ${barcodes.first.displayValue}     *******');
+      final painter = BarcodeDetectorPainter(barcodes, inputImage.inputImageData!.size, inputImage.inputImageData!.imageRotation);
       _customPaint = CustomPaint(painter: painter);
     } else {
       _customPaint = null;
